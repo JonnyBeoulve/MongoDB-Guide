@@ -19,8 +19,17 @@ const UserSchema = new Schema({
   }]
 });
 
+// Getter function
 UserSchema.virtual('postCount').get(function() {
   return this.posts.length;
+});
+
+// Middleware for pre remove
+UserSchema.pre('remove', function() {
+  const BlogPost = mongoose.model('blogPost');
+  // Go through all blogPosts, if their ID is in the match, remove it
+  BlogPost.remove({ _id: { $in: this.blogPosts }})
+    .then(() => next()); // When done, go on to next middleware or end if none exists
 });
 
 const User = mongoose.model('user', UserSchema);
