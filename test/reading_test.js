@@ -31,6 +31,14 @@ describe('Reading users out of the database', () => {
 
   it('can skip and limit the result set', () => {
     // Skip 1 and limit 2
-    User.find({}).skip(1).limit(2)
+    User.find({})
+      .sort({ name: 1 }) // Sort by name ascending
+      .skip(1)
+      .limit(2)
+      .then((users) => {
+        assert(users.length === 2);
+        assert(users[0].name === 'Joe');
+        assert(users[1].name === 'Maria');
+      })
   });
 });
