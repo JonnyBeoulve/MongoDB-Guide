@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const PostSchema = require('./post');
 const Schema = mongoose.Schema;
 
+/*==============================================================
+// The schema that defines the structure of a user.
+==============================================================*/
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -27,7 +30,7 @@ UserSchema.virtual('postCount').get(function() {
 // Middleware for pre remove
 UserSchema.pre('remove', function() {
   const BlogPost = mongoose.model('blogPost');
-  // Go through all blogPosts, if their ID is in the match, remove it
+  // Go through all blogPosts. If their ID is in the match, then remove it
   BlogPost.remove({ _id: { $in: this.blogPosts }})
     .then(() => next()); // When done, go on to next middleware or end if none exists
 });
